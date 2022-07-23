@@ -1,15 +1,22 @@
 package tests;
 
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.Status;
+import com.aventstack.extentreports.reporter.ExtentHtmlReporter;
+import com.aventstack.extentreports.reporter.configuration.Theme;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+import org.testng.ITestResult;
 import org.testng.annotations.*;
 import pages.*;
 import utilities.Driver;
 import utilities.ExcelUtil;
 import utilities.Log;
 
+import java.io.IOException;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +35,9 @@ public class Test01 {
     String secilenUrunBasligi;
     List<String> listOfString = new ArrayList<>();
 
+    ExtentHtmlReporter htmlReporter;
+    ExtentReports extent;
+    ExtentTest test;
 
 
     @BeforeSuite
@@ -35,10 +45,29 @@ public class Test01 {
         Driver.getDriver().navigate().to("https://www.amazon.com.tr/");
     }
 
+    @BeforeTest
+    public void setExtent() {
+        htmlReporter = new ExtentHtmlReporter("./test-output/myReport.html");
+        htmlReporter.config().setDocumentTitle("Automation Report");
+        htmlReporter.config().setReportName("Functional Report");
+        htmlReporter.config().setTheme(Theme.DARK);
+
+        extent=new ExtentReports();
+        extent.attachReporter(htmlReporter);
+
+        extent.setSystemInfo("Hostname", "LocalHost");
+        extent.setSystemInfo("OS","Windows10");
+        extent.setSystemInfo("Name", "Recep");
+        extent.setSystemInfo("Browser","Chrome");
+
+    }
+
+
 
     @Test
     public void Test01 () {
 
+        test = extent.createTest("Test Baslangic");
         Log.warn("Test Basliyor...");
         wait.until(ExpectedConditions.elementToBeClickable(anasayfaObj.hesapVeListelerButonu));
         anasayfaObj.hesapVeListelerButonu.click();
@@ -47,6 +76,7 @@ public class Test01 {
 
     @Test(dataProvider = "loginInfo")
     public void Test02_UserLogin(String username, String password) {
+        test = extent.createTest("Login Info");
         Driver.getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         Log.info("Uyelik e-posta bilgisi giriliyor...");
         girisYapObj.epostaTextKutusu.sendKeys(username + Keys.ENTER);
@@ -60,6 +90,7 @@ public class Test01 {
     @Test
     public void Test03 () {
 
+        test = extent.createTest("Test Suruyor");
         Driver.getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         anasayfaObj.searchTextKutusu.sendKeys("samsung");
         anasayfaObj.searchButonu.click();
@@ -119,8 +150,28 @@ public class Test01 {
         return loginCredentials;
     }
 
+    @AfterTest
+    public void endReport(){
+        extent.flush();
+    }
+
+    @AfterMethod
+    public void tearDown(ITestResult result) throws IOException {
+        if(result.getStatus() == ITestResult.FAILURE){
+            test.log(Status.FAIL,"TEST CASE FAILED IS "+ result.getName());
+            test.log(Status.FAIL, "TEST CASE FAILED IS "+ result.getThrowable());
+            Driver.getScreenshot("FailedScreenShot");
+            test.addScreenCaptureFromPath(System.getProperty("user.dir") + "/test-output/Screenshots/");
+        } else if (result.getStatus() == ITestResult.SKIP){
+            test.log(Status.SKIP, "TEST CASE SKIPPED IS "+ result.getName());
+        } else if(result.getStatus() == ITestResult.SUCCESS){
+            test.log(Status.PASS, "TEST CASE PASSED IS "+ result.getName());
+        }
+
+    }
+
     @AfterSuite
-    public void tearDown () {
+    public void tearDownSuite () {
         Log.warn("Test Bitti... Driver Kapatiliyor...");
         Driver.closeDriver();
     }
