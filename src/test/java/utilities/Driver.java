@@ -40,9 +40,9 @@ public class Driver {
     public static void waitAndClick(WebElement element) {
         for (int i = 0; i < timeout; i++) {
             try {
-                wait(2);
+                wait(1);
                 element.click();
-                break;
+                return;
             } catch (WebDriverException e) {
                 wait(1);
             }
@@ -64,6 +64,7 @@ public class Driver {
             e.printStackTrace();
         }
     }
+
 
     public static String getScreenshot(String name) throws IOException {
         String date = new SimpleDateFormat("yyyyMMddhhmmss").format(new Date());

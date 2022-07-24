@@ -22,7 +22,7 @@ public class Urunler {
     @FindBy(xpath = "//span[@class='s-pagination-strip']/a[1]")
     public WebElement ikinciSayfaButonu;
 
-    @FindBy(xpath = "//div[@data-component-type='s-search-result'][5]")
+    @FindBy(xpath = "//div[@cel_widget_id='MAIN-SEARCH_RESULTS-6']")
     public WebElement usttenBesinciUrun;
 
     @FindBy(id = "productTitle")

@@ -29,15 +29,16 @@ public class Test01 {
     Urunler urunlerObj = new Urunler();
     Listelerim listelerimObj = new Listelerim();
     Sepetim sepetimobj = new Sepetim();
-    ExcelUtil excelUtil;
+    ExcelUtil excelUtilObj;
     WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(20));
     Random randomObj=new Random();
     String secilenUrunBasligi;
+
     List<String> listOfString = new ArrayList<>();
 
     ExtentHtmlReporter htmlReporter;
-    ExtentReports extent;
-    ExtentTest test;
+    ExtentReports extentReports;
+    ExtentTest extentTest;
 
 
     @BeforeSuite
@@ -52,22 +53,22 @@ public class Test01 {
         htmlReporter.config().setReportName("Functional Report");
         htmlReporter.config().setTheme(Theme.DARK);
 
-        extent=new ExtentReports();
-        extent.attachReporter(htmlReporter);
+        extentReports =new ExtentReports();
+        extentReports.attachReporter(htmlReporter);
 
-        extent.setSystemInfo("Hostname", "LocalHost");
-        extent.setSystemInfo("OS","Windows10");
-        extent.setSystemInfo("Name", "Recep");
-        extent.setSystemInfo("Browser","Chrome");
+        extentReports.setSystemInfo("Hostname", "LocalHost");
+        extentReports.setSystemInfo("OS","Windows10");
+        extentReports.setSystemInfo("Name", "Recep");
+        extentReports.setSystemInfo("Browser","Chrome");
 
     }
 
 
 
     @Test
-    public void Test01 () {
+    public void Test01_Baslangic () {
 
-        test = extent.createTest("Test Baslangic");
+        extentTest = extentReports.createTest("Test Baslangic");
         Log.warn("Test Basliyor...");
         wait.until(ExpectedConditions.elementToBeClickable(anasayfaObj.hesapVeListelerButonu));
         anasayfaObj.hesapVeListelerButonu.click();
@@ -76,7 +77,7 @@ public class Test01 {
 
     @Test(dataProvider = "loginInfo")
     public void Test02_UserLogin(String username, String password) {
-        test = extent.createTest("Login Info");
+        extentTest = extentReports.createTest("Login Info");
         Driver.getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         Log.info("Uyelik e-posta bilgisi giriliyor...");
         girisYapObj.epostaTextKutusu.sendKeys(username + Keys.ENTER);
@@ -88,9 +89,9 @@ public class Test01 {
     }
 
     @Test
-    public void Test03 () {
+    public void Test03_UrunIslemleri () {
 
-        test = extent.createTest("Test Suruyor");
+        extentTest = extentReports.createTest("Test Suruyor");
         Driver.getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         anasayfaObj.searchTextKutusu.sendKeys("samsung");
         anasayfaObj.searchButonu.click();
@@ -145,27 +146,26 @@ public class Test01 {
     public Object [][] getData(){
         String path = "./src/test/java/resources/optiim.xlsx";
         String sheetName="login_info";
-        excelUtil = new ExcelUtil(path,sheetName);
-        Object [][]  loginCredentials = excelUtil.getDataArrayWithoutFirstRow();
+        excelUtilObj = new ExcelUtil(path,sheetName);
+        Object [][]  loginCredentials = excelUtilObj.getDataArrayWithoutFirstRow();
         return loginCredentials;
     }
 
     @AfterTest
     public void endReport(){
-        extent.flush();
+        extentReports.flush();
     }
 
     @AfterMethod
     public void tearDown(ITestResult result) throws IOException {
         if(result.getStatus() == ITestResult.FAILURE){
-            test.log(Status.FAIL,"TEST CASE FAILED IS "+ result.getName());
-            test.log(Status.FAIL, "TEST CASE FAILED IS "+ result.getThrowable());
-            Driver.getScreenshot("FailedScreenShot");
-            test.addScreenCaptureFromPath(System.getProperty("user.dir") + "/test-output/Screenshots/");
+            extentTest.log(Status.FAIL,"TEST CASE FAILED IS "+ result.getName());
+            extentTest.log(Status.FAIL, "TEST CASE FAILED IS "+ result.getThrowable());
+            Driver.getScreenshot("FailedScreenshot");
         } else if (result.getStatus() == ITestResult.SKIP){
-            test.log(Status.SKIP, "TEST CASE SKIPPED IS "+ result.getName());
+            extentTest.log(Status.SKIP, "TEST CASE SKIPPED IS "+ result.getName());
         } else if(result.getStatus() == ITestResult.SUCCESS){
-            test.log(Status.PASS, "TEST CASE PASSED IS "+ result.getName());
+            extentTest.log(Status.PASS, "TEST CASE PASSED IS "+ result.getName());
         }
 
     }
