@@ -69,7 +69,7 @@ public class Test01 {
     public void Test01_Baslangic () {
 
         extentTest = extentReports.createTest("Test Baslangic");
-        Log.warn("Test Basliyor...");
+        Log.warn("Test Basliyor..");
         wait.until(ExpectedConditions.elementToBeClickable(anasayfaObj.hesapVeListelerButonu));
         anasayfaObj.hesapVeListelerButonu.click();
 
@@ -79,11 +79,11 @@ public class Test01 {
     public void Test02_UserLogin(String username, String password) {
         extentTest = extentReports.createTest("Login Info");
         Driver.getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-        Log.info("Uyelik e-posta bilgisi giriliyor...");
+        Log.info("Uyelik e-posta bilgisi giriliyor..");
         girisYapObj.epostaTextKutusu.sendKeys(username + Keys.ENTER);
 
         Driver.getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-        Log.info("Uyelik sifre bilgisi giriliyor...");
+        Log.info("Uyelik sifre bilgisi giriliyor..");
         girisYapObj.sifreTextKutusu.sendKeys(password);
         girisYapObj.girisYapButonu.click();
     }
@@ -107,12 +107,12 @@ public class Test01 {
 
         Assert.assertTrue(Driver.getDriver().getCurrentUrl().contains("sr_pg_2"));
 
-        Log.info("Ustten 5. Urun Inceleniyor...");
+        Log.info("Ustten 5. Urun Inceleniyor..");
         Driver.waitAndClick(urunlerObj.usttenBesinciUrun);
 
         secilenUrunBasligi = urunlerObj.secilenUrunBasligi.getText();
 
-        Log.info("Urun Listeye Ekleniyor...");
+        Log.info("Urun Listeye Ekleniyor..");
         Driver.waitAndClick(urunlerObj.urunuListeyeEkleButonu);
 
         Driver.getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
@@ -125,7 +125,7 @@ public class Test01 {
         }
         Assert.assertTrue(listOfString.contains(secilenUrunBasligi));
 
-        Log.info("Listedeki Urun Sepete Ekleniyor...");
+        Log.info("Listedeki Urun Sepete Ekleniyor..");
         Driver.waitAndClick(listelerimObj.listedekiUrunuSepeteEkleButonu);
 
         Driver.wait(2);
@@ -135,7 +135,7 @@ public class Test01 {
 
         Assert.assertEquals(sepetimobj.sepettekiUrunBasligi.getText(), secilenUrunBasligi);
 
-        Log.info("Sepetteki Urun Siliniyor...");
+        Log.info("Sepetteki Urun Siliniyor..");
         Driver.waitAndClick(sepetimobj.sepettekiUrunuSilButonu);
 
         Assert.assertTrue(sepetimobj.sepettekiUrunuSilAssert.getText().contains("Alışveriş Sepetiniz konumundan kaldırıldı."));
@@ -172,7 +172,7 @@ public class Test01 {
 
     @AfterSuite
     public void tearDownSuite () {
-        Log.warn("Test Bitti... Driver Kapatiliyor...");
+        Log.warn("Test Bitti.. Driver Kapatiliyor..");
         Driver.closeDriver();
     }
 
