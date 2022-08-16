@@ -172,7 +172,7 @@ public class Test01 {
 
     @AfterSuite
     public void tearDownSuite () {
-        Log.warn("Test Bitti.. Driver Kapatiliyor..");
+        Log.warn("Test Bitti.. Driver Kapatiliyor...");
         Driver.closeDriver();
     }
 
