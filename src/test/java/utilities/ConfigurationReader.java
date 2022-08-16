@@ -15,7 +15,6 @@ public class ConfigurationReader {
 
             properties= new Properties();
             properties.load(file);
-
             file.close();
         } catch (Exception e) {
             e.printStackTrace();
