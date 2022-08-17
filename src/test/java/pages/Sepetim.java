@@ -11,7 +11,7 @@ public class Sepetim {
         PageFactory.initElements(Driver.getDriver(),this);
     }
 
-    @FindBy(xpath = "//div[@class='a-fixed-left-grid-inner']/div[2]/ul/li/span/a/span/span/span[2]")
+    @FindBy(xpath = "(//span[@class='a-truncate-cut'])[1]")
     public WebElement sepettekiUrunBasligi;
 
     @FindBy(xpath = "//div[@class='a-fixed-left-grid-inner']/div[2]/div/span[2]/span")
